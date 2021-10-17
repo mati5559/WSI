@@ -2,8 +2,8 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.ticker import LinearLocator
 import numpy as np
-from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.patches as mpatches
+from mpl_toolkits.mplot3d import *
 
 
 # Booth's function
@@ -20,7 +20,7 @@ def invHessGradF(x, y):
     return [(15/18)*grad[0] - (2/9)*grad[1], (15/18)*grad[1] - (2/9)*grad[0]]
 
 
-# Finding function's minimum with gradient descent method
+# Finding function's minimum methods
 # and drawing all iterations on plot
 def gradientDescent(startPoint, axes, b, maxIterations):
     currentPoint = startPoint
@@ -44,7 +44,7 @@ def newtonMethod(startPoint, axes, b, maxIterations):
         d = invHessGradF(currentPoint[0], currentPoint[1])
         currentPoint = [b * d[0] + currentPoint[0], b * d[1] + currentPoint[1]]
         axes.scatter(currentPoint[0], currentPoint[1], f(currentPoint[0], currentPoint[1]),
-                     marker='o', c='red')
+                     marker='o', c='green')
 
 
 if __name__ == "__main__":
@@ -58,20 +58,20 @@ if __name__ == "__main__":
     Z = f(X, Y)
 
     # Configure axes
-    axes.set_zlim(-100, 1000)
+    axes.set_zlim(-10, 1000)
     axes.zaxis.set_major_locator(LinearLocator(10))
     axes.set_ylabel("Y")
     axes.set_xlabel("X")
     axes.set_zlabel("Z")
 
-    # Plot the surface.
-    surface = axes.plot_surface(X, Y, Z, cmap=cm.coolwarm, linewidth=0, antialiased=True)
+    # Plot the surface
+    surface = axes.plot_surface(X, Y, Z, cmap='terrain', linewidths=0, antialiased=True, alpha=0.8, zorder=10)
+
+    gradientDescent([3, -5], axes, -0.01, 150)
+    newtonMethod([3, -5], axes, -0.01, 150)
 
     # Legend
     figure.colorbar(surface, shrink=0.5, aspect=5)
-
-    gradientDescent([4, -4], axes, -0.05, 100)
-    newtonMethod([4, -4], axes, -0.05, 100)
-
     plt.legend()
+
     plt.show()
