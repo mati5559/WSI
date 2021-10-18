@@ -4,6 +4,7 @@ from matplotlib.ticker import LinearLocator
 import numpy as np
 import matplotlib.patches as mpatches
 from mpl_toolkits.mplot3d import *
+import argparse
 
 
 # Booth's function
@@ -30,7 +31,7 @@ def gradientDescent(startPoint, axes, b, maxIterations):
 
     for iteration in range(0, maxIterations):
         d = gradF(currentPoint[0], currentPoint[1])
-        currentPoint = [b * d[0] + currentPoint[0], b * d[1] + currentPoint[1]]
+        currentPoint = [-b * d[0] + currentPoint[0], -b * d[1] + currentPoint[1]]
         axes.scatter(currentPoint[0], currentPoint[1], f(currentPoint[0], currentPoint[1]),
                      marker='o', c='red')
 
@@ -42,12 +43,12 @@ def newtonMethod(startPoint, axes, b, maxIterations):
 
     for iteration in range(0, maxIterations):
         d = invHessGradF(currentPoint[0], currentPoint[1])
-        currentPoint = [b * d[0] + currentPoint[0], b * d[1] + currentPoint[1]]
+        currentPoint = [-b * d[0] + currentPoint[0], -b * d[1] + currentPoint[1]]
         axes.scatter(currentPoint[0], currentPoint[1], f(currentPoint[0], currentPoint[1]),
                      marker='o', c='green')
 
 
-if __name__ == "__main__":
+def preparePlot():
     # Creating plot
     figure, axes = plt.subplots(subplot_kw={"projection": "3d"})
 
@@ -66,12 +67,37 @@ if __name__ == "__main__":
 
     # Plot the surface
     surface = axes.plot_surface(X, Y, Z, cmap='terrain', linewidths=0, antialiased=True, alpha=0.8, zorder=10)
-
-    gradientDescent([3, -5], axes, -0.01, 150)
-    newtonMethod([3, -5], axes, -0.01, 150)
-
-    # Legend
+    
     figure.colorbar(surface, shrink=0.5, aspect=5)
-    plt.legend()
 
+    return axes
+
+
+def getArguments():
+    parser = argparse.ArgumentParser(description='Show plot of Booth\'s function and working of Newton method and gradient descent method.')
+    parser.add_argument('X', metavar='X', type=float, help='X coordinate of starting point')
+    parser.add_argument('Y', metavar='Y', type=float, help='Y coordinate of starting point')
+    parser.add_argument('B', metavar='B', type=float, help='B parameter for algorithm')
+    parser.add_argument('iter', metavar='iter', type=int, help='Number of iterations')
+
+    parser.add_argument('--nm', metavar='n', action='store_const', const=True, 
+                        help='Show Newton method')
+    parser.add_argument('--gdm', metavar='gdm', action='store_const', const=True, 
+                        help='Show gradient descent method')
+
+    return parser.parse_args()
+
+if __name__ == "__main__":
+    axes = preparePlot()
+    args = getArguments()
+
+    if args.gdm:
+        gradientDescent([args.X, args.Y], axes, args.B, args.iter)
+
+    if args.nm:
+        newtonMethod([args.X, args.Y], axes, args.B, args.iter)
+        
+
+    # Show plot    
+    plt.legend()
     plt.show()
