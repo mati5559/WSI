@@ -1,13 +1,11 @@
 import matplotlib.pyplot as plt
-from matplotlib import cm
 from matplotlib.ticker import LinearLocator
 import numpy as np
-import matplotlib.patches as mpatches
 from mpl_toolkits.mplot3d import *
 import argparse
 
 
-# Booth's function
+# Simplified Booth's function
 def f(x, y):
     return 5*x*x +8*x*y -34*x +5*y*y -38*y +74
 
@@ -23,30 +21,41 @@ def invHessGradF(x, y):
 
 # Finding function's minimum methods
 # and drawing all iterations on plot
+# return coordinates of the best found minimum
 def gradientDescent(startPoint, axes, b, maxIterations):
     currentPoint = startPoint
-    axes.scatter(currentPoint[0], currentPoint[1], f(currentPoint[0], currentPoint[1]),
-                 marker='o', c='red', label='Gradient descent method')
+    axes.scatter(*currentPoint, f(*currentPoint), marker='o', c='red', label='Gradient descent method')
 
+    minimum = currentPoint
 
-    for iteration in range(0, maxIterations):
-        d = gradF(currentPoint[0], currentPoint[1])
+    for _ in range(0, maxIterations):
+        d = gradF(*currentPoint)
         currentPoint = [-b * d[0] + currentPoint[0], -b * d[1] + currentPoint[1]]
-        axes.scatter(currentPoint[0], currentPoint[1], f(currentPoint[0], currentPoint[1]),
-                     marker='o', c='red')
+
+        axes.scatter(*currentPoint, f(*currentPoint), marker='o', c='red')
+
+        if(f(*currentPoint) < f(*minimum)):
+            minimum = currentPoint
+
+    return minimum
 
 
 def newtonMethod(startPoint, axes, b, maxIterations):
     currentPoint = startPoint
-    axes.scatter(currentPoint[0], currentPoint[1], f(currentPoint[0], currentPoint[1]),
-                 marker='o', c='green', label='Newton method')
+    axes.scatter(*currentPoint, f(*currentPoint), marker='o', c='green', label='Newton method')
 
-    for iteration in range(0, maxIterations):
-        d = invHessGradF(currentPoint[0], currentPoint[1])
+    minimum = currentPoint
+
+    for _ in range(0, maxIterations):
+        d = invHessGradF(*currentPoint)
         currentPoint = [-b * d[0] + currentPoint[0], -b * d[1] + currentPoint[1]]
-        axes.scatter(currentPoint[0], currentPoint[1], f(currentPoint[0], currentPoint[1]),
-                     marker='o', c='green')
 
+        axes.scatter(*currentPoint, f(*currentPoint), marker='o', c='green')
+        
+        if(f(*currentPoint) < f(*minimum)):
+            minimum = currentPoint
+
+    return minimum
 
 def preparePlot():
     # Creating plot
@@ -65,7 +74,7 @@ def preparePlot():
     axes.set_xlabel("X")
     axes.set_zlabel("Z")
 
-    # Plot the surface
+    # Create the surface
     surface = axes.plot_surface(X, Y, Z, cmap='terrain', linewidths=0, antialiased=True, alpha=0.8, zorder=10)
     
     figure.colorbar(surface, shrink=0.5, aspect=5)
@@ -73,6 +82,7 @@ def preparePlot():
     return axes
 
 
+# Configuring argument parser and return parsed arguments
 def getArguments():
     parser = argparse.ArgumentParser(description='Show plot of Booth\'s function and working of Newton method and gradient descent method.')
     parser.add_argument('X', metavar='X', type=float, help='X coordinate of starting point')
@@ -87,17 +97,21 @@ def getArguments():
 
     return parser.parse_args()
 
+
 if __name__ == "__main__":
     axes = preparePlot()
     args = getArguments()
 
     if args.gdm:
-        gradientDescent([args.X, args.Y], axes, args.B, args.iter)
+        result = gradientDescent([args.X, args.Y], axes, args.B, args.iter)
+        print("Minimum found with gradient descent method: ")
+        print([result, f(*result)])
 
     if args.nm:
-        newtonMethod([args.X, args.Y], axes, args.B, args.iter)
+        result = newtonMethod([args.X, args.Y], axes, args.B, args.iter)
+        print("Minimum found with Newton method: ")
+        print([result, f(*result)])
         
 
-    # Show plot    
     plt.legend()
     plt.show()
