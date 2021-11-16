@@ -1,5 +1,3 @@
-#!/bin/python3
-
 import matplotlib.pyplot as plt
 import argparse
 import coloring
@@ -75,7 +73,7 @@ if __name__ == "__main__":
             file.close()
 
     if arguments.c:
-        colors, grade = coloring.colorGraph(graph, arguments.ps, arguments.iter, arguments.pm, int(arguments.vertex/5)+1)
+        colors, grade = coloring.colorGraph(graph, arguments.ps, arguments.iter, arguments.pm, int(arguments.vertex))
         print("Solution quality: " + str(grade) + " (lower is better, should be at most equal to vertices number)")
 
     if arguments.s:

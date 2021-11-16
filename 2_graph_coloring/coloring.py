@@ -21,9 +21,8 @@ def penalty(pattern:Graph, individual):
     for index, node in enumerate(pattern.nodes):
         for connection in node["connections"]:
             if(individual[index] == individual[connection]):
-                # Each same color connection == 2000 penalty points
                 fragileConnections += 1
-
+    # Penalty = 10^(2 * bad_connections_amount)
     return 0 if fragileConnections == 0 else pow(10, fragileConnections)
 
 

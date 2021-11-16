@@ -1,0 +1,16 @@
+{
+	"graph": 
+	[
+		{"x": 100, "y": 100, "connections": [7, 8]}, 
+		{"x": 100, "y": 250, "connections": [7, 5]}, 
+		{"x": 100, "y": 400, "connections": [5, 7, 9]}, 
+		{"x": 100, "y": 550, "connections": [6, 8, 9]}, 
+		{"x": 100, "y": 700, "connections": [8, 9]}, 
+		{"x": 800, "y": 100, "connections": [2, 1]}, 
+		{"x": 800, "y": 250, "connections": [3]}, 
+		{"x": 800, "y": 400, "connections": [0, 1, 2]}, 
+		{"x": 800, "y": 550, "connections": [0, 4, 3]}, 
+		{"x": 800, "y": 700, "connections": [4, 2, 3]}
+	], 
+	"colors": null
+}
