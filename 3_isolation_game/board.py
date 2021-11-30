@@ -43,11 +43,18 @@ class Board:
                 possibleMoves.append(chr(65+coords[1]) + str(coords[0]))
 
         return possibleMoves
-    
-    # Game over when player have no legal moves
-    def isTerminated(self, player):
-        possibleMoves = self.getPossibleMoves(player)
-        return (len(possibleMoves) == 0)
+
+    # None if game is not terminated, "1", "2" or "draw" in other cases
+    def getWinner(self, actualPlayer):
+        playersMoves = { "1":len(self.getPossibleMoves("1")), "2": len(self.getPossibleMoves("2"))}
+        
+
+        if((playersMoves["1"] == 0) & (playersMoves["2"] == 0)):
+            return "draw"
+        elif(playersMoves[actualPlayer] == 0):
+            return "1" if actualPlayer == "2" else "2"
+        
+        return None
     
     def makeMove(self, player, move):
         possibleMoves = self.getPossibleMoves(player)

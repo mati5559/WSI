@@ -12,18 +12,30 @@ class Game:
     def start(self):
         self.board.print()
         while True:
-            if(self.board.isTerminated("1")): 
-                print("Player 2 is the winner!")
-                return "2"
+            winner = self.board.getWinner("1")
+            if(winner is not None): 
+                if(winner == "draw"):
+                    print("It's a draw!")
+                    return winner
+                print("Player " + winner + " is the winner!")
+                return winner
 
-            self.board.makeMove("1", self.player1.getMove(self.board))
+            if(self.board.makeMove("1", self.player1.getMove(self.board)) == False):
+                raise ValueError("Player tried to make illegal move!")
+            
             self.board.print()
 
-            if(self.board.isTerminated("2")): 
-                print("Player 1 is the winner!")
-                return "1"
+            winner = self.board.getWinner("2")
+            if(winner is not None): 
+                if(winner == "draw"):
+                    print("It's a draw!")
+                    return winner
+                print("Player " + winner + " is the winner!")
+                return winner
 
-            self.board.makeMove("2", self.player2.getMove(self.board))
+            if(self.board.makeMove("2", self.player2.getMove(self.board)) == False):
+                raise ValueError("Player tried to make illegal move!")
+
             self.board.print()
             
 
