@@ -8,6 +8,7 @@ class Player:
     def changePlayerNumber(self, playerNumber):
         self.playerNumber = playerNumber
 
+# This player class reads moves from console 
 class HumanPlayer(Player):
     def getMove(self, board):
         while True:
@@ -19,21 +20,25 @@ class HumanPlayer(Player):
             
             print("Invaild move, please try again.")
 
+# This player class generates random (legal) moves
 class RandomPlayer(Player):
     def getMove(self, board):
         possibleMoves = board.getPossibleMoves(self.playerNumber)
         return random.choice(possibleMoves)
 
+# This player class chooses best move using minimax algorithm
 class MinimaxPlayer(Player):
     def __init__(self, depth):
         self.depth = depth
 
-    def _heuristicGrade(self, board:Board):
+    # Calculating rating of position using very simple algorithm
+    # TODO: find better solution
+    def __heuristicGrade(self, board:Board):
         p1moves = len(board.getPossibleMoves("1"))
         p2moves = len(board.getPossibleMoves("2"))
         return (p1moves-p2moves)/8
 
-    def _minimax(self, board, depth, actualPlayer):
+    def __minimax(self, board, depth, actualPlayer):
         winner = board.getWinner(actualPlayer)
         if winner is not None:
             # Rating > 0 menas that player 1 is winning, 0 means draw
@@ -46,16 +51,18 @@ class MinimaxPlayer(Player):
                 return (-1, None)
             
         if(depth == 0):
-            return (self._heuristicGrade(board), None)
+            return (self.__heuristicGrade(board), None)
         
+        # Calculate grades for all possible moves
         possibleMoves = board.getPossibleMoves(actualPlayer)
         successors = [[copy.deepcopy(board), move] for move in possibleMoves]
         successorsRatings = []
 
         for s in successors:
             s[0].makeMove(actualPlayer, s[1])
-            successorsRatings.append((self._minimax(s[0], depth-1, "1" if actualPlayer == "2" else "2")[0], s[1]))
+            successorsRatings.append((self.__minimax(s[0], depth-1, "1" if actualPlayer == "2" else "2")[0], s[1]))
 
+        # Choose minimum- or maximum-rated move (depends on player)
         # Player 1 is "max player"
         if(actualPlayer == "1"):
             maxRating = -1
@@ -82,5 +89,8 @@ class MinimaxPlayer(Player):
                 
 
     def getMove(self, board):
-        rating, move = self._minimax(board, self.depth, self.playerNumber)
+        rating, move = self.__minimax(board, self.depth, self.playerNumber)
+
+        # Display position rate for debugging and information
+        print("Player " + self.playerNumber + "'s position rating: " + str(rating))
         return move

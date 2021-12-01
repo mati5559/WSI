@@ -40,8 +40,7 @@ def main():
     elif(arguments.player2 == "minimax"): secondPlayer = MinimaxPlayer(arguments.depth2)
     
     game = Game(board, firstPlayer, secondPlayer)
-    game.start()
-
+    return game.start()
 
 if __name__ == "__main__":
     main()

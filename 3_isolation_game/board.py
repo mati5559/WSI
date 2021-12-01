@@ -1,3 +1,4 @@
+# Convert move (for example "A5", "C0"...) to pair of indexes in board table
 def moveToCoordinate(move):
     x = move[1]
     y = ord(move[0])-65
@@ -60,13 +61,16 @@ class Board:
         possibleMoves = self.getPossibleMoves(player)
         playerPosition = self.player1Position if player == "1" else self.player2Position
         
+        # Check if move is legal
         if move not in possibleMoves:
             return False
 
+        # Mark field as visited
         coordinates = moveToCoordinate(move)
         self.fields[coordinates[1]][coordinates[0]] = player
         self.fields[playerPosition[1]][playerPosition[0]] = "#"
         
+        # Change actual player position
         if player == "1":
             self.player1Position = coordinates
         else:
