@@ -12,6 +12,7 @@ class Game:
     def start(self):
         self.board.print()
         while True:
+            # Player1's move
             winner = self.board.getWinner("1")
             if(winner is not None): 
                 if(winner == "draw"):
@@ -25,6 +26,7 @@ class Game:
             
             self.board.print()
 
+            # Player2's move
             winner = self.board.getWinner("2")
             if(winner is not None): 
                 if(winner == "draw"):

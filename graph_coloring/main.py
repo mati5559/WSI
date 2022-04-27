@@ -18,7 +18,7 @@ def getArguments():
     giGroup.add_argument('-r', metavar="FILENAME", type=str, help="Read graph from file")
 
     giGroup.add_argument('-g', action='store_true', help='Generate random graph')
-    parser.add_argument('--vertex', type=int, default=25, help="Number of vertex of generated graph (default 25)")
+    parser.add_argument('--vertex', type=int, default=25, help="Number of vertices of generated graph (default 25)")
     parser.add_argument('--fillfactor', type=float, default=0.4, help="Determinates how many of the possible edges graph will have (between 0 and 1, default 0.4)")
 
     parser.add_argument('-c', action="store_true", help="Color graph using evolutionary algorithm")
@@ -46,7 +46,7 @@ def showGraph(graph, lineColor="black", pointSize=50, colorsIndexes=None):
             plt.plot([node["x"], graph.nodes[connection]["x"]],
                      [node["y"], graph.nodes[connection]["y"]], c=lineColor)
 
-
+    # If there is more nodes than colors, all nodes will be red
     if((colorsIndexes is None) or (max(colorsIndexes) >= len(colorMap))):
         colors = ["red" for _ in range(0, len(x))]
     else:

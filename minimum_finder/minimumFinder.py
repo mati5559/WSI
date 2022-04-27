@@ -19,7 +19,7 @@ def invHessGradF(x, y):
     return [(15/18)*grad[0] - (2/9)*grad[1], (15/18)*grad[1] - (2/9)*grad[0]]
 
 
-# Finding function's minimum methods
+# Finding function's minimum
 # and drawing all iterations on plot
 # return coordinates of the best found minimum
 def gradientDescent(startPoint, axes, b, maxIterations):
@@ -28,7 +28,7 @@ def gradientDescent(startPoint, axes, b, maxIterations):
 
     minimum = currentPoint
 
-    for _ in range(0, maxIterations):
+    for _ in range(maxIterations):
         d = gradF(*currentPoint)
         currentPoint = [-b * d[0] + currentPoint[0], -b * d[1] + currentPoint[1]]
 
@@ -46,7 +46,7 @@ def newtonMethod(startPoint, axes, b, maxIterations):
 
     minimum = currentPoint
 
-    for _ in range(0, maxIterations):
+    for _ in range(maxIterations):
         d = invHessGradF(*currentPoint)
         currentPoint = [-b * d[0] + currentPoint[0], -b * d[1] + currentPoint[1]]
 

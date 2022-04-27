@@ -55,7 +55,7 @@ def main():
 
     if args.test is not None:
         successes = 0
-        for _ in range(0, args.test):
+        for _ in range(args.test):
             result = driver.start()
             driver.clearBoard()
             if(result.status == "win"):

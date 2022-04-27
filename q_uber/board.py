@@ -82,7 +82,7 @@ class Board:
                 print(field, end="")
             print("")
 
-    # Returns False when player hit obstacle
+    # Returns False when player hit obstacle or true when move is "legal"
     def move(self, direction) -> bool:
         if(self.fields[self.playerPosition[1]][self.playerPosition[0]] not in ["S", "E"]):
             self.fields[self.playerPosition[1]][self.playerPosition[0]] = "X"
